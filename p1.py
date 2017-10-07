@@ -20,14 +20,18 @@ def dijkstras_shortest_path(initial_position, destination, graph, adj):
     path = []
     queue = [(0, initial_position)]
     while queue:
-        currentCost, currentPos = heapq.heappop(queue)
+        currentCost, currentPos = heappop(queue)
         path.append(currentPos)
         if currentPos == destination:
             return path
         else:
-            newCosts = navigation_edges(graph, currentPos) #set newCosts equal to the list navigation_edges returns
+            newCosts = adj(graph, currentPos) #set newCosts equal to the list navigation_edges returns
             for cost in newCosts:
-                heapq.headpush(queue, cost)
+                listPos = cost[0]
+                listCost = cost[1]
+                if listPos not in path:
+                    heappush(queue, (listCost, listPos))
+    return None
 
 
 def dijkstras_shortest_path_to_all(initial_position, graph, adj):
