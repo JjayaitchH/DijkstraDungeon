@@ -45,7 +45,30 @@ def dijkstras_shortest_path_to_all(initial_position, graph, adj):
     Returns:
         A dictionary, mapping destination cells to the cost of a path from the initial_position.
     """
-    pass
+    destination_dict = {}
+    for point in graph['waypoints']:
+        if point is not initial_position:
+            path = []
+            queue = [(0, initial_position)]
+            totalCost = 0
+        while queue:
+            currentCost, currentPos = heappop(queue)
+            totalCost = totalCost + currentCost
+            path.append(currentPos)
+            if currentPos == graph['waypoints'][point]:
+                break
+            else:
+                newCosts = adj(graph, currentPos)
+
+                for  cost in newCosts:
+                    listPos = cost[0]
+                    listCost = cost[1]
+                    if listPos not in path:
+                        heappush(queue, (listCost, listPos))
+        destination_dict[point] = totalCost
+    return destination_dict
+
+    
 
 
 def navigation_edges(level, cell):
@@ -91,11 +114,11 @@ def navigation_edges(level, cell):
             if direction in specialCases:
                 nextCost = level['spaces'].get(directions[direction])
                 newCost = ((.5 * sqrt(2)) * initialCost) + ((.5 * sqrt(2)) * nextCost)
-                costs.append((direction), newCost)
+                costs.append(direction, newCost)
             else:
                 nextCost = level['spaes'].get(directions[direction])
                 newCost = (.5 * initialCost) + (.5 * nextCost)
-                costs.append((direction), newCost)
+                costs.append(direction, newCost)
     return costs
 
 
